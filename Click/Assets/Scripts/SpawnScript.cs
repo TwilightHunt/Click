@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,9 +19,9 @@ public class SpawnScript : MonoBehaviour
         if (SpawnArea == null)
             return;
 
-        Gizmos.color = GizmosColor;        
+        Gizmos.color = GizmosColor;
         SpawnArea.GetWorldCorners(corners);
-        foreach(Vector3 pos in corners)
+        foreach (Vector3 pos in corners)
         {
             Gizmos.DrawSphere(pos, GizmosRadius);
         }
@@ -32,11 +32,9 @@ public class SpawnScript : MonoBehaviour
     {
         //https://docs.unity3d.com/ScriptReference/RectTransform.GetWorldCorners.html
         SpawnArea.GetWorldCorners(corners);
-
-        for (int i = 0; i < 25; i++)
-        {
-            Spawn();
-        }
+    
+        StartCoroutine(Co_WaitForSeconds(1f));
+           
     }
 
     public void Spawn()
@@ -47,5 +45,20 @@ public class SpawnScript : MonoBehaviour
 
         GameObject sphere = Instantiate(Sphere, randomPosition, Quaternion.identity, transform);
         sphere.transform.localScale = Vector3.one * Random.Range(MinMaxSphereSize.x, MinMaxSphereSize.y);
+    }
+
+
+    // Выжидание в n секунд
+    private IEnumerator Co_WaitForSeconds(float value)
+    {
+
+        for (int i = 0; i < 25; i++)
+        {
+            Spawn();
+            
+            yield return new WaitForSeconds(value);
+           
+        }
+        
     }
 }
